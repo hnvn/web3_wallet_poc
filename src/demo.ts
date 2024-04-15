@@ -2,7 +2,7 @@ import bigInt from "big-integer";
 import { randomBytes } from "crypto";
 import { Wallet } from "ethers"
 
-function createRandomWallet(): [address: string, secret: string, mnemonic?: string] {
+export function createRandomWallet(): [address: string, secret: string, mnemonic?: string] {
     // Create a random Ethereum wallet
     const wallet = Wallet.createRandom();
 
@@ -44,7 +44,7 @@ function evaluatePolynomial(coefficients: bigInt.BigInteger[], x: bigInt.BigInte
     return result;
 }
 
-function createSecretShares(secretKey: string, numShares: number, threshold: number): SecretShare[] {
+export function createSecretShares(secretKey: string, numShares: number, threshold: number): SecretShare[] {
     const primeBits = 64;
     const prime = generatePrime(primeBits);
     const coefficients = generateCoefficients(secretKey, threshold, prime);
@@ -59,7 +59,7 @@ function createSecretShares(secretKey: string, numShares: number, threshold: num
 }
 
 // Function to reconstruct the secret from a subset of shares
-function reconstructSecret(shares: SecretShare[], prime: bigInt.BigInteger) {
+export function reconstructSecret(shares: SecretShare[], prime: bigInt.BigInteger) {
     let secret = bigInt(0);
     for (let i = 0; i < shares.length; i++) {
         let term = bigInt(shares[i].y, 16);
@@ -75,6 +75,6 @@ function reconstructSecret(shares: SecretShare[], prime: bigInt.BigInteger) {
     return secret.toString(16);
 }
 
-class SecretShare {
+export class SecretShare {
     constructor(readonly x: string, readonly y: string) { }
 }
