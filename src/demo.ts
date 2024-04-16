@@ -18,7 +18,7 @@ export function createRandomWallet(): [address: string, secret: string, mnemonic
 }
 
 // Function to generate a random prime number of a given bit length
-function generatePrime(bits: number): bigInt.BigInteger {
+export function generatePrime(bits: number): bigInt.BigInteger {
     let prime: bigInt.BigInteger;
     do {
         prime = bigInt(randomBytes(bits).toString('hex'), 16);
@@ -44,7 +44,7 @@ function evaluatePolynomial(coefficients: bigInt.BigInteger[], x: bigInt.BigInte
     return result;
 }
 
-export function createSecretShares(secretKey: string, numShares: number, threshold: number): SecretShare[] {
+export function createSecretShares(secretKey: string, numShares: number, threshold: number): [SecretShare[], bigInt.BigInteger] {
     const primeBits = 64;
     const prime = generatePrime(primeBits);
     const coefficients = generateCoefficients(secretKey, threshold, prime);
@@ -55,7 +55,7 @@ export function createSecretShares(secretKey: string, numShares: number, thresho
         const y = evaluatePolynomial(coefficients, x, prime);
         shares.push(new SecretShare(x.toString(10), y.toString(16)));
     }
-    return shares;
+    return [shares, prime];
 }
 
 // Function to reconstruct the secret from a subset of shares

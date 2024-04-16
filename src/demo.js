@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SecretShare = exports.reconstructSecret = exports.createSecretShares = exports.createRandomWallet = void 0;
+exports.SecretShare = exports.reconstructSecret = exports.createSecretShares = exports.generatePrime = exports.createRandomWallet = void 0;
 const big_integer_1 = __importDefault(require("big-integer"));
 const crypto_1 = require("crypto");
 const ethers_1 = require("ethers");
@@ -28,6 +28,7 @@ function generatePrime(bits) {
     } while (!prime.isPrime());
     return prime;
 }
+exports.generatePrime = generatePrime;
 // Function to generate random coefficients for the polynomial
 function generateCoefficients(secret, numShares, prime) {
     const coefficients = [(0, big_integer_1.default)(secret, 16)];
@@ -54,7 +55,7 @@ function createSecretShares(secretKey, numShares, threshold) {
         const y = evaluatePolynomial(coefficients, x, prime);
         shares.push(new SecretShare(x.toString(10), y.toString(16)));
     }
-    return shares;
+    return [shares, prime];
 }
 exports.createSecretShares = createSecretShares;
 // Function to reconstruct the secret from a subset of shares
