@@ -23,6 +23,8 @@ describe("smock test", function () {
             (0, chai_1.expect)((0, demo_1.reconstructSecret)(shares, prime)).to.deep.equal(secret);
             // case 2: use only 2 out of 3 shares
             (0, chai_1.expect)((0, demo_1.reconstructSecret)(shares.slice(0, 2), prime)).to.deep.equal(secret);
+            (0, chai_1.expect)((0, demo_1.reconstructSecret)([shares[2], shares[0]], prime)).to.deep.equal(secret);
+            (0, chai_1.expect)((0, demo_1.reconstructSecret)([shares[1], shares[2]], prime)).to.deep.equal(secret);
         });
         it("cannot reconstruct secret key if don't have enough shares", function () {
             (0, chai_1.expect)((0, demo_1.reconstructSecret)(shares.slice(0, 1), prime)).to.not.equal(secret);
@@ -30,7 +32,7 @@ describe("smock test", function () {
             (0, chai_1.expect)((0, demo_1.reconstructSecret)(shares.slice(2), prime)).to.not.equal(secret);
         });
         it("cannot reconstruct secret key if using wrong prime", function () {
-            const randomPrime = (0, demo_1.generatePrime)(32);
+            const randomPrime = (0, demo_1.generatePrime)(64);
             (0, chai_1.expect)((0, demo_1.reconstructSecret)(shares, randomPrime)).to.not.equal(secret);
         });
     });
